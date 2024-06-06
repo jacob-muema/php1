@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Virtual Bookstore</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function redirectToLogin() {
+            window.location.href = "login.html";
+        }
+
+        function fetchData(queryId) {
+            fetch(`getData.php?queryId=${queryId}`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('result').innerHTML = data;
+                });
+        }
+
+        function checkLoggedIn() {
+            fetch('check_login.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.loggedIn) {
+                        redirectToLogin();
+                    }
+                });
+        }
+
+        window.onload = function() {
+            checkLoggedIn();
+        };
+    </script>
+</head>
+<body>
+    <h1>Virtual Bookstore</h1>
+    <button onclick="fetchData('most_expensive')">Most Expensive Book</button>
+    <button onclick="fetchData('most_popular')">Most Popular Books in Each City</button>
+    <button onclick="fetchData('most_bought')">Most Bought Book</button>
+    <button onclick="fetchData('least_preferred')">Least Preferred Book</button>
+
+    <h2>Result:</h2>
+    <div id="result"></div>
+</body>
+</html>
